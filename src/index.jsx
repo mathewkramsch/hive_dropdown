@@ -1,18 +1,53 @@
 /* index.jsx */
 
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import DropDown from './dropDown';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { useState } from 'react'
+import './index.css'
+import DropDown from './dropDown'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
 
 function App() {
+	const [selectedValues, setSelectedValues] = useState([])
+
+	/* can pass any list option name/value pairs to DropDown component */
 	const options = []
-	for (let i=1; i<=20; i++) options.push(`Option ${i}`)
+	for (let i=1; i<=20; i++) {
+		options.push({
+			name: `Option ${i}`,
+			value: i
+		});
+	}
+
+	/* can pass custom function to do handle select behavior */
+	const onSelect = (values)=>{
+	/* this function will just update state with list of selected values
+		but you can do anything you want with the selected values */
+		setSelectedValues(values)
+	}
+
+	/* for setting value displayed when no options selected */
+	const defaultSelect = 'Select Option'
+
+	const handleSubmit = ()=>{
+		console.log(`Option values selected: ${selectedValues}`)
+	}
 
 	return (
 		<div className='main'>
 			<h1>Custom Drop-Down React Component</h1>
-			<DropDown options={options}/>
+			<form onSubmit={e=>e.preventDefault()}>
+				<DropDown 
+					options={options} 
+					onSelectFunc={onSelect}
+					default={defaultSelect} 
+				/>
+				<button onClick={handleSubmit}>
+					Submit
+					<FontAwesomeIcon icon={faArrowRight} id='submit-icon'/>
+				</button>
+			</form>
 		</div>
 	);
 

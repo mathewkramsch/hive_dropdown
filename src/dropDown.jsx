@@ -7,17 +7,17 @@ import './dropDown.css';
 
 function Option(props) {
 	const selectItem = (e)=>{
-		props.selectFunc(props.name);
+		props.selectFunc(props.option.name, props.option.value);
 	}
 	return (
-		<div className='option' onClick={selectItem}>{props.name}</div>
+		<div className='option' onClick={selectItem}>{props.option.name}</div>
 	);
 }
 
 function Options(props) {
 	let optionsList = props.options
 	const getOptions = (option, i)=>{
-		return <Option name={option} selectFunc={props.selectFunc} key={i}/>
+		return <Option option={option} selectFunc={props.selectFunc} key={i}/>
 	}
 	return (
 		<div className='options'>{ optionsList.map(getOptions) }</div>
@@ -26,36 +26,45 @@ function Options(props) {
 
 export default function DropDown(props) {
 	const [openOptions, setOpenOptions] = useState(false)
-	const [selectedOption, setSelectedOption] = useState('Select Option')
+	const [selectedOptions, setSelectedOptions] = useState([])
+	const [selectedOptionsValues, setSelectedOptionsValues] = useState([])
 
 	const toggleOpenOptions = ()=>{
 		setOpenOptions(!openOptions);
 	}
 	const focusOutOptions = ()=>{
+		return  // do nothing for now
 		setTimeout(()=>{  /* delay so option can be selected */
 			setOpenOptions(false);
 		},100);
 	}
-	const selectItem = (itemName)=>{
-		setOpenOptions(false);
-		setSelectedOption(itemName)
+	const selectItem = (optionName, optionValue)=>{
+		let optionsSet = new Set(selectedOptions)
+		let optionsValuesSet = new Set (selectedOptionsValues)
+		optionsSet.add(optionName)
+		optionsValuesSet.add(optionValue)
+		setSelectedOptions([...optionsSet]);
+		setSelectedOptionsValues([...optionsValuesSet]);
+		props.onSelectFunc([...optionsValuesSet]);
+	}
+	const listOptionNames = ()=>{
+		return selectedOptions.toString()
 	}
 
 	return (
 		<div className='drop-down-form'>
 			<label>Options to Choose</label>
-			
+
 			<div className='select' tabIndex='0' 
 				onClick={toggleOpenOptions} onBlur={focusOutOptions}>
 				<span id='select-text' 
-					className={selectedOption==='Select Option'? '':'selected-text'}>
-					{selectedOption}
+					className={selectedOptions===props.default? '':'selected-text'}>
+					{ selectedOptions.length===0? props.default : listOptionNames() }
 				</span>
 				<FontAwesomeIcon icon={faChevronDown} id='select-icon'/>
 			</div>
 
 			{ openOptions && <Options selectFunc={selectItem} options={props.options}/> }
-
 			<small id='error-message'></small>
 		</div>
 	);
