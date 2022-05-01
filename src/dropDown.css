@@ -42,8 +42,8 @@ label {
 
 .select {
 	box-sizing: border-box;
+	border: 2px solid var(--neutral-200);
 	background: var(--neutral-200);
-	border: 1px solid var(--neutral-200);
 	padding: 10px 16px;
 	border-radius: 4px;
 	width: 100%;
@@ -51,13 +51,6 @@ label {
 	align-items: center;
 	justify-content: space-between;
 	cursor: pointer;
-
-	/* disables text selection */
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-o-user-select: none;
-	user-select: none;
 }
 #select-text, .option {
 	font-family: var(--main-font);
@@ -69,6 +62,21 @@ label {
 }
 #select-text {
 	color: var(--neutral-700);
+	width: 100%;
+	word-break: break-all;
+}
+.option-bubble {
+	border-radius: 5px;
+	background: var(--neutral-200);
+	white-space: nowrap;
+	padding: 6px 10px;
+	margin: 6px;
+	line-height: 34px;
+}
+.option-selected {
+	background: white;
+	border: 2px solid var(--neutral-300);
+	padding: 3px 16px 3px 4px;
 }
 .selected-item {
 	color: var(--blue-900);
@@ -78,26 +86,23 @@ label {
 }
 
 .options {
-	position: absolute;
-	max-height: 400px;
+	max-height: 350px;
 	overflow: auto;
-	width: 378px;
 	background-color: white;
-	transform: translate(0, 70px);
 	border: 1px solid var(--neutral-300);
 	border-radius: 4px;
 	filter: var(--shadow);
-
-	/* disables text selection */
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-o-user-select: none;
-	user-select: none;
+	margin-top: 7px;
 }
 .option {
 	cursor: pointer;
 	padding: 6px 16px;
+}
+.option-icon {
+	margin-right: 10px;
+}
+#open-circle {
+	color: var(--neutral-300);
 }
 .option:hover {
 	background-color: var(--neutral-200);
@@ -109,4 +114,13 @@ label {
 
 #size-error-message {
 	display: none;
+}
+
+label, .options, .select {
+	/* disables text selection */
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 }

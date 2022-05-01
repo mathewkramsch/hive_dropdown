@@ -3,6 +3,9 @@
 import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { faCircleCheck } from '@fortawesome/free-solid-svg-icons'
+import { faCircleDot } from '@fortawesome/free-solid-svg-icons'
+import { faCircle } from '@fortawesome/free-regular-svg-icons'
 import './dropDown.css';
 
 function Option(props) {
@@ -18,7 +21,11 @@ function Option(props) {
 	return (
 		<div className={selected? 'selected-item option' : 'option'}
 			onClick={selectItem}>
-			{props.option.name}
+			{ selected? 
+				<FontAwesomeIcon icon={faCircleDot} className='option-icon'/> :
+				<FontAwesomeIcon icon={faCircle} className='option-icon' id='open-circle'/>
+			}
+			<span>{props.option.name}</span>
 		</div>
 	);
 }
@@ -40,17 +47,24 @@ export default function DropDown(props) {
 	const [openOptions, setOpenOptions] = useState(false)
 	const [selectedOptions, setSelectedOptions] = useState([])
 	const [selectedOptionsValues, setSelectedOptionsValues] = useState([])
+	const [selecting, setSelecting] = useState(false)
 
 	const toggleOpenOptions = ()=>{
 		setOpenOptions(!openOptions);
 	}
-	const focusOutOptions = ()=>{
-		return  // do nothing for now
+	const focusOutSelect = ()=>{
 		setTimeout(()=>{  /* delay so option can be selected */
-			setOpenOptions(false);
-		},100);
+			setOpenOptions(false)
+		},100)
+	}
+	const focusOutOptions = ()=>{
+		setTimeout(()=>{  /* delay so option can be selected */
+			setSelecting(false)
+		},100)
 	}
 	const selectItem = (optionName, optionValue)=>{
+		setSelecting(true)
+		setOpenOptions(true)
 		let optionsSet = new Set(selectedOptions)
 		let optionsValuesSet = new Set (selectedOptionsValues)
 		if (optionsValuesSet.has(optionValue)) {
@@ -64,25 +78,34 @@ export default function DropDown(props) {
 		setSelectedOptionsValues([...optionsValuesSet]);
 		props.onSelectFunc([...optionsValuesSet]);
 	}
-	const listOptionNames = ()=>{
-		return selectedOptions.toString()
+	const getSelectedOptions = (option, i)=>{
+		return (
+			<span className='option-bubble' key={i}>{option}</span>
+		);
 	}
 
 	return (
 		<div className='drop-down-form'>
 			<label>{props.label}</label>
 
-			<div className='select' tabIndex='0' 
-				onClick={toggleOpenOptions} onBlur={focusOutOptions}>
+			<div className={selectedOptions.length===0? 'select':'select option-selected'}
+				tabIndex='0' onClick={toggleOpenOptions} onBlur={focusOutSelect}>
 				<span id='select-text' 
-					className={selectedOptions===props.default? '':'selected-options'}>
-					{ selectedOptions.length===0? props.default : listOptionNames() }
+					className={selectedOptions.length===0? '':'selected-options'}>
+					{ selectedOptions.length===0? 
+							props.default : 
+							selectedOptions.map(getSelectedOptions)
+					}
 				</span>
 				<FontAwesomeIcon icon={faChevronDown} id='select-icon'/>
 			</div>
 
-			{ openOptions && <Options selectFunc={selectItem} 
-				options={props.options} selected={selectedOptionsValues}/> }
+			{ (openOptions || selecting) && 
+				<div onBlur={focusOutOptions} tabIndex='0'>
+					<Options selectFunc={selectItem} options={props.options}
+						selected={selectedOptionsValues}/>
+				</div>
+			}
 			{/*<small id='error-message'></small>*/}
 		</div>
 	);

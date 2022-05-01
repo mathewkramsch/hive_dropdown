@@ -18,9 +18,9 @@ body {
 
 form {
 	display: flex;
-	width: 500px;
+	width: 550px;
 	gap: 20px;
-	align-items: flex-end;
+	align-items: flex-start;
 }
 
 button {
@@ -35,6 +35,14 @@ button {
 	border-radius: 4px;
 	padding: 10px 16px;
 	cursor: pointer;
+	margin-top: 23px;
+
+	/* disables text selection */
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 }
 button:hover {
 	background-color: var(--blue-800);
