@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { faCircleCheck } from '@fortawesome/free-solid-svg-icons'
 import { faCircleDot } from '@fortawesome/free-solid-svg-icons'
 import { faCircle } from '@fortawesome/free-regular-svg-icons'
 import './dropDown.css';
