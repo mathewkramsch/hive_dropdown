@@ -51,20 +51,18 @@ export default function DropDown(props) {
 		},100);
 	}
 	const selectItem = (optionName, optionValue)=>{
-		let optionNames = selectedOptions
-		let optionValues = selectedOptionsValues
-		if (optionValues.includes(optionValue)) {
-			let optionNameIndex = optionNames.indexOf(optionName)
-			let optionValueIndex = optionValues.indexOf(optionValue)
-			optionNames.splice(optionNameIndex, 1);
-			optionValues.splice(optionValueIndex, 1);
+		let optionsSet = new Set(selectedOptions)
+		let optionsValuesSet = new Set (selectedOptionsValues)
+		if (optionsValuesSet.has(optionValue)) {
+			optionsSet.delete(optionName)
+			optionsValuesSet.delete(optionValue)
 		} else  {
-			optionNames.push(optionName);
-			optionValues.push(optionValue);
+			optionsSet.add(optionName)
+			optionsValuesSet.add(optionValue)
 		}
-		setSelectedOptions(optionNames);
-		setSelectedOptionsValues(optionValues);
-		props.onSelectFunc(optionValues);
+		setSelectedOptions([...optionsSet]);
+		setSelectedOptionsValues([...optionsValuesSet]);
+		props.onSelectFunc([...optionsValuesSet]);
 	}
 	const listOptionNames = ()=>{
 		return selectedOptions.toString()
