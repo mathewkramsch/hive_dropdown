@@ -27,11 +27,11 @@ function App() {
 		setSelectedValues(values)
 	}
 
-	/* for setting value displayed when no options selected */
-	const defaultSelect = 'Select Option'
-
 	const handleSubmit = ()=>{
-		console.log(`Option values selected: ${selectedValues}`)
+		if (selectedValues.length===0)
+			console.log('No options selected')
+		else
+			console.log(`Option values selected: ${selectedValues}`)
 	}
 
 	return (
@@ -41,7 +41,8 @@ function App() {
 				<DropDown 
 					options={options} 
 					onSelectFunc={onSelect}
-					default={defaultSelect} 
+					default='Select Option'
+					label='Options to Choose'
 				/>
 				<button onClick={handleSubmit}>
 					Submit
